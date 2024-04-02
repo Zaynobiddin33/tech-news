@@ -1,5 +1,8 @@
 {%extends 'base.html'%}
 {%load static%}
+{%block title%}
+    Kategoriyalar
+{%endblock%}
 {%block content%}
 
     <main>
@@ -119,15 +122,19 @@
     <div class="pagination-area pb-45 text-center">
         <div class="container">
             <div class="row">
-                <div class="col-xl-12">
+                <div class="col-xl-12" id="2">
                     <div class="single-wrap d-flex justify-content-center">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-start">
-                              <li class="page-item"><a class="page-link" href="#"><span class="flaticon-arrow roted"></span></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                              <li class="page-item"><a class="page-link" href="#"><span class="flaticon-arrow right-arrow"></span></a></li>
+                                {%if news.has_previous%}
+                              <li class="page-item"><a class="page-link" href="?page={{news.previous_page_number}}#12"><span class="flaticon-arrow roted"></span></a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{news.previous_page_number}}#12">{{news.previous_page_number}}</a></li>
+                                {%endif%}
+                                <li class="page-item active"><a class="page-link" href="#">{{news.number}}</a></li>
+                                {%if news.has_next%}
+                                <li class="page-item"><a class="page-link" href="?page={{news.next_page_number}}#12">{{news.next_page_number}}</a></li>
+                              <li class="page-item"><a class="page-link" href="?page={{news.next_page_number}}#12"><span class="flaticon-arrow right-arrow"></span></a></li>
+                              {%endif%}
                             </ul>
                           </nav>
                     </div>

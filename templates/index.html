@@ -1,6 +1,32 @@
 
 {%extends 'base.html'%}
 {%load static%}
+{%block title%}
+    Asosiy sahifa
+{%endblock%}
+{%block weather%}
+<div class="header-top black-bg d-none d-md-block">
+    <div class="container">
+        <div class="col-xl-12">
+            <div class="row d-flex justify-content-between align-items-center">
+                <div class="header-info-left">
+                    <ul>     
+                        <li><img src="{% static 'assets/img/icon/header_icon1.png'%}" alt="">{{temperature}}˚C , Tashkent, {{description}}</li>
+                        <li><img src="{% static 'assets/img/icon/header_icon1.png'%}" alt="">Tuesday, 18th June, 2019</li>
+                    </ul>
+                </div>
+                <div class="header-info-right">
+                    <ul class="header-social">    
+                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    <li> <a href="#"><i class="fab fa-pinterest-p"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
 {%block content%}
     <main>
     <!-- Trending Area Start -->
@@ -49,8 +75,9 @@
 
 
                     <div class="col-lg-4 justify-content-center">
-                        {%for i in newest5%}
                         <h3>The latest news</h3>
+                        {%for i in newest5%}
+                        
                         <a href="{%url 'news' i.id %}">
                         <div class="trand-right-single d-flex">
                             <div class="trand-right-img image col-4" style=" overflow: hidden; height: 100px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-repeat: no-repeat; background-position: center;">
@@ -74,7 +101,7 @@
      
     <!-- End Weekly-News -->
    <!-- Whats New Start -->
-    <section class="whats-news-area pt-50 pb-20">
+    <section class="whats-news-area pt-50 pb-20" id="12">
         <div class="container">
             <div class="row">
             <div class="col-lg-">
@@ -178,15 +205,19 @@
     <div class="pagination-area pb-45 text-center">
         <div class="container">
             <div class="row">
-                <div class="col-xl-12">
+                <div class="col-xl-12" id="2">
                     <div class="single-wrap d-flex justify-content-center">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-start">
-                              <li class="page-item"><a class="page-link" href="#"><span class="flaticon-arrow roted"></span></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                <li class="page-item"><a class="page-link" href="#">03</a></li>
-                              <li class="page-item"><a class="page-link" href="#"><span class="flaticon-arrow right-arrow"></span></a></li>
+                                {%if all.has_previous%}
+                              <li class="page-item"><a class="page-link" href="?page={{all.previous_page_number}}#12"><span class="flaticon-arrow roted"></span></a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{all.previous_page_number}}#12">{{all.previous_page_number}}</a></li>
+                                {%endif%}
+                                <li class="page-item active"><a class="page-link" href="#">{{all.number}}</a></li>
+                                {%if all.has_next%}
+                                <li class="page-item"><a class="page-link" href="?page={{all.next_page_number}}#12">{{all.next_page_number}}</a></li>
+                              <li class="page-item"><a class="page-link" href="?page={{all.next_page_number}}#12"><span class="flaticon-arrow right-arrow"></span></a></li>
+                              {%endif%}
                             </ul>
                           </nav>
                     </div>
@@ -196,5 +227,6 @@
     </div>
     <!-- End pagination  -->
     </main>
+
 {%endblock%}
   
