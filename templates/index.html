@@ -1,0 +1,195 @@
+
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+    <main>
+    <!-- Trending Area Start -->
+    <div class="trending-area fix">
+        <div class="container" >
+            <div class="trending-main">
+                <!-- Trending Tittle -->
+                <br><br>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Trending Top -->
+                        <div class="trending-top mb-30">
+                            <div class="trend-top-img">
+                                <img src="{{main.banner_image.url}}" alt="">
+                                <div class="trend-top-cap">
+                                    <span>{{main.category}}</span>
+                                    <h2><a href="{%url 'news' main.id%}">{{main.title}}</a></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Trending Bottom -->
+                        <div class="trending-bottom">
+
+                            <div class="row">
+                                {%for i in main3%}
+                                <div class="col-lg-4">
+                                <div class="single-bottom mb-35">
+                                    <div class="trend-bottom-img mb-30">
+                                        <img src="{{i.banner_image.url}}" alt="">
+                                    </div>
+                                    <div class="trend-bottom-cap">
+                                        <span class="color1">{{i.category}}</span>
+                                        <h4><a href="{%url 'news' i.id%}">{{i.title}}</a></h4>
+                                    </div>
+                                </div>
+                                </div>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Riht content -->
+
+
+                    <div class="col-lg-4">
+                        {%for i in newest5%}
+                        <style>
+                        </style>
+                        <div class="trand-right-single d-flex">
+                            <div class="trand-right-img image col-4" style=" overflow: hidden; height: 100px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-repeat: no-repeat; background-position: center;">
+                               
+                            </div>
+                            <div class="trand-right-cap col-8">
+                                <span class="color1">{{i.category}}</span>
+                                <h6><a href="{%url 'news' i.id %}">{{i.title}}</a></h6>
+                            </div>
+                        </div>
+                        {%endfor%}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Trending Area End -->
+    <!--   Weekly-News start -->
+     
+    <!-- End Weekly-News -->
+   <!-- Whats New Start -->
+    <section class="whats-news-area pt-50 pb-20">
+        <div class="container">
+            <div class="row">
+            <div class="col-lg-">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-lg-3 col-md-3">
+                        <div class="section-tittle mb-30">
+                            <h3>Whats New</h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-9">
+                        <div class="properties__button">
+                            <!--Nav Button  -->                                            
+
+                            <!--End Nav Button  -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Nav Card -->
+                        <div class="tab-content" id="nav-tabContent">
+                            <!-- card one -->
+                            <div class="tab-pane fade show active s" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">           
+                                <div class="whats-news-caption">
+                                    <div class="row">
+                                    <style>
+                                        .news-card {
+                                        background-color: #fff;
+                                        border-radius: 10px;
+                                        overflow: hidden;
+                                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                        margin-bottom: 20px;
+                                    }
+
+                                    .news-image {
+                                        height: 200px; /* Adjust as needed */
+                                        overflow: hidden;
+                                    }
+
+                                    .news-image img {
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover; /* Ensure the image covers the entire container */
+                                    }
+
+                                    .news-content {
+                                        padding: 20px;
+                                    }
+
+                                    .news-title {
+                                        font-size: 1.2rem;
+                                        margin-bottom: 10px;
+                                    }
+
+                                    .news-category {
+                                        font-size: 0.9rem;
+                                        color: #888;
+                                    }
+
+                                    </style>
+                                        {%for i in all%}
+                                        <div class="col-lg-4 col-md-6 mb-4">
+                                            <a href="{%url 'news' i.id%}">
+                                                <div class="single-what-news">
+                                                    <div class="news-card">
+                                                        <div class="news-image">
+                                                            <img src="{{ i.banner_image.url }}" alt="News Image">
+                                                        </div>
+                                                        <div class="news-content" style="height: 170px;">
+                                                            <h3 class="news-title">{{ i.title }}</h3>
+                                                            <p class="news-category">{{ i.category }}</p>
+                                                        </div>
+                                                    </div>
+                                            </a>
+                                            </div>
+                                        </div>
+                                        {%endfor%}
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- End Nav Card -->
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- Whats New End -->
+    <!--   Weekly2-News start -->     
+    <!-- End Weekly-News -->
+    <!-- Start Youtube -->
+
+    <!-- End Start youtube -->
+    <!--  Recent Articles start -->
+         
+    <!--Recent Articles End -->
+    <!--Start pagination -->
+    <div class="pagination-area pb-45 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="single-wrap d-flex justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-start">
+                              <li class="page-item"><a class="page-link" href="#"><span class="flaticon-arrow roted"></span></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                              <li class="page-item"><a class="page-link" href="#"><span class="flaticon-arrow right-arrow"></span></a></li>
+                            </ul>
+                          </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End pagination  -->
+    </main>
+{%endblock%}
+  
