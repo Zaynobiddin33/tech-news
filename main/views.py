@@ -44,3 +44,14 @@ def category_sorted(request, id):
     }
     return render(request, 'category.html', context)
 
+def contact(request):
+    if request.method == 'POST':
+        message = request.POST['message']
+        name = request.POST['name']
+        email = request.POST['email']
+        models.Contact.objects.create(
+            body = message,
+            name =name,
+            email = email,
+        )
+    return render(request, 'contact.html')

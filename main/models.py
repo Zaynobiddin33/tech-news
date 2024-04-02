@@ -29,3 +29,9 @@ class Contact(models.Model):
     status = models.CharField(max_length = 1, default = '0')
     sent_time = models.DateTimeField(auto_now_add = True)
 
+    def __str__(self) -> str:
+        return self.email
+    
+    class Meta:
+        verbose_name = 'message'
+
