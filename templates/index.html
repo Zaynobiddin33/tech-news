@@ -12,30 +12,34 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <!-- Trending Top -->
-                        <div class="trending-top mb-30">
-                            <div class="trend-top-img">
-                                <img src="{{main.banner_image.url}}" alt="">
-                                <div class="trend-top-cap">
-                                    <span>{{main.category}}</span>
-                                    <h2><a href="{%url 'news' main.id%}">{{main.title}}</a></h2>
+                        <a href="{%url 'news' main.id%}">
+                            <div class="trending-top mb-30">
+                                <div class="trend-top-img">
+                                    <img src="{{main.banner_image.url}}" alt="">
+                                    <div class="trend-top-cap">
+                                        <span>{{main.category}}</span>
+                                        <h2 style="color: white; background-color: rgba(0, 0, 0, 0.615);" class="p-2">{{main.title}}</h2>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <!-- Trending Bottom -->
                         <div class="trending-bottom">
 
                             <div class="row">
                                 {%for i in main3%}
                                 <div class="col-lg-4">
+                                    <a href="{%url 'news' i.id%}">
                                 <div class="single-bottom mb-35">
                                     <div class="trend-bottom-img mb-30">
                                         <img src="{{i.banner_image.url}}" alt="">
                                     </div>
                                     <div class="trend-bottom-cap">
                                         <span class="color1">{{i.category}}</span>
-                                        <h4><a href="{%url 'news' i.id%}">{{i.title}}</a></h4>
+                                        <h4>{{i.title}}</h4>
                                     </div>
                                 </div>
+                                    </a>
                                 </div>
                                 {%endfor%}
                             </div>
@@ -44,19 +48,20 @@
                     <!-- Riht content -->
 
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 justify-content-center">
                         {%for i in newest5%}
-                        <style>
-                        </style>
+                        <h3>The latest news</h3>
+                        <a href="{%url 'news' i.id %}">
                         <div class="trand-right-single d-flex">
                             <div class="trand-right-img image col-4" style=" overflow: hidden; height: 100px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-repeat: no-repeat; background-position: center;">
                                
                             </div>
                             <div class="trand-right-cap col-8">
                                 <span class="color1">{{i.category}}</span>
-                                <h6><a href="{%url 'news' i.id %}">{{i.title}}</a></h6>
+                                <h6>{{i.title}}</h6>
                             </div>
                         </div>
+                    </a>
                         {%endfor%}
 
                     </div>
