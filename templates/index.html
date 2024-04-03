@@ -51,11 +51,12 @@
                                 <div class="col-lg-4">
                                     <a href="{%url 'news' i.id%}">
                                 <div class="single-bottom mb-35">
-                                    <div class="trend-bottom-img mb-30">
-                                        <img src="{{i.banner_image.url}}" alt="">
+                                    <div class="trend-bottom-img mb-30" style="overflow: hidden; height: 150px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-position: center; background-repeat: no-repeat;">
+                                        
                                     </div>
                                     <div class="trend-bottom-cap">
                                         <span class="color1">{{i.category}}</span>
+                                        <span>{{i.created_at.date}}</span>
                                         <h4>{{i.title}}</h4>
                                     </div>
                                 </div>
@@ -79,6 +80,7 @@
                             </div>
                             <div class="trand-right-cap col-8">
                                 <span class="color1">{{i.category}}</span>
+                                <span>{{i.created_at.date}}</span>
                                 <h6>{{i.title}}</h6>
                             </div>
                         </div>
@@ -164,9 +166,14 @@
                                                         <div class="news-image">
                                                             <img src="{{ i.banner_image.url }}" alt="News Image">
                                                         </div>
-                                                        <div class="news-content" style="height: 170px;">
+                                                        <div class="news-content" style="height: 130px;">
                                                             <h3 class="news-title">{{ i.title }}</h3>
                                                             <p class="news-category">{{ i.category }}</p>
+
+                                                          
+                                                        </div>
+                                                        <div class="col-12 justify-content-end d-flex">
+                                                            <p style="font-size: 13px;"> {{i.created_at.date}}</p>
                                                         </div>
                                                     </div>
                                             </a>

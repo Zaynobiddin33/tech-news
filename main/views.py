@@ -2,58 +2,61 @@ from django.shortcuts import render, redirect
 from . import models
 import requests
 from django.core.paginator import Paginator
+from django.db.models import Q
 # Create your views here.
 
 
 import requests
 from django.shortcuts import render
 
+from django.core.cache import cache
+import requests
+
 def main(request):
-    main = models.News.objects.filter(is_essential = True).order_by('-id').first()
-    main3 =models.News.objects.filter(is_essential = True).order_by('-id')[1:4]
-    newest5 = models.News.objects.filter(is_essential = False).order_by('-id')[:5]
-    news = models.News.objects.all().exclude(id__gte = main3[2].id, is_essential = True)
+    main = models.News.objects.filter(is_essential=True).order_by('-id').first()
+    main3 = models.News.objects.filter(is_essential=True).order_by('-id')[1:4]
+    newest5 = models.News.objects.filter(is_essential=False).order_by('-id')[:5]
+    news = models.News.objects.all().exclude(id__gte=main3[2].id, is_essential=True)
     all_data = Paginator(news, 9)
     page = request.GET.get('page')
     all = all_data.get_page(page)
 
-    api_key = '32be2340a522e1b2b33f2a0e69cdc3aa'
+    # Check if weather data is cached
+    weather_data = cache.get('weather_data')
 
-    # Make a GET request to the OpenWeatherMap API for Tashkent
-    url = f'http://api.openweathermap.org/data/2.5/weather?q=Tashkent&appid={api_key}&units=metric'
-    response = requests.get(url)
+    # If weather data is not cached or expired, fetch it from the API
+    if not weather_data:
+        api_key = '32be2340a522e1b2b33f2a0e69cdc3aa'
+        url = f'http://api.openweathermap.org/data/2.5/weather?q=Tashkent&appid={api_key}&units=metric'
+        response = requests.get(url)
 
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        # Parse the JSON response
-        data = response.json()
+        if response.status_code == 200:
+            data = response.json()
+            temperature = data['main']['temp']
+            description = data['weather'][0]['description']
 
-        # Extract relevant weather data
-        city = data['name']
-        temperature = data['main']['temp']
-        description = data['weather'][0]['description']
-
-        # Pass the weather data to the template
-        context = {
-            'city': city,
-            'temperature': temperature,
-            'description': description,
-            'main':main,
-            'main3':main3,
-            'newest5':newest5,
-            'all':all
-        }
+            # Cache the weather data for an hour
+            cache.set('weather_data', {'temperature': temperature, 'description': description}, timeout=3600)
+        else:
+            # If the request was not successful, set default weather data
+            temperature = None
+            description = None
     else:
-        # If the request was not successful, display an error message
-        context = {
-            'error': 'Failed to fetch weather data. Please try again later.',
-            'main':main,
-            'main3':main3,
-            'newest5':newest5,
-            'all':all
-            }
+        # Use cached weather data
+        temperature = weather_data['temperature']
+        description = weather_data['description']
+
+    context = {
+        'temperature': temperature,
+        'description': description,
+        'main': main,
+        'main3': main3,
+        'newest5': newest5,
+        'all': all
+    }
 
     return render(request, 'index.html', context)
+
 
 
 def category(request):
@@ -102,3 +105,17 @@ def contact(request):
             email = email,
         )
     return render(request, 'contact.html')
+
+def search (request):
+    q = request.GET.get('q')
+    if q:
+        news_raw = models.News.objects.filter(Q(title__icontains = q) | Q(text__icontains = q))
+    else:
+        news_raw = models.News.objects.all()
+    p = Paginator(news_raw, 12)
+    page = request.GET.get('page')
+    news = p.get_page(page)
+    context = {
+        'news' : news,
+    }
+    return render(request, 'search.html', context)
