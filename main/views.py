@@ -16,7 +16,7 @@ def main(request):
     main = models.News.objects.filter(is_essential=True).order_by('-id').first()
     main3 = models.News.objects.filter(is_essential=True).order_by('-id')[1:4]
     newest5 = models.News.objects.filter(is_essential=False).order_by('-id')[:5]
-    news = models.News.objects.all().exclude(id__gte=main3[2].id, is_essential=True)
+    news = models.News.objects.all().order_by('-id').exclude(id__gte=main3[2].id, is_essential=True)
     all_data = Paginator(news, 9)
     page = request.GET.get('page')
     all = all_data.get_page(page)
@@ -68,17 +68,20 @@ def category(request):
     context = {
         'news':news,
         'categories': models.Category.objects.all(),
-        "id":id
+        'id': 'All'
     }
     return render(request, 'category.html', context)
 
 
 def news(request, id):
     news = models.News.objects.get(id = id)
-    recents = models.News.objects.filter().order_by('-id')[:10]
+    recents = models.News.objects.filter().order_by('-id').exclude(id=id)[:10]
+    related_news = models.News.objects.filter(category = news.category).exclude(id = id)[:6]
     context = {
         'news':news,
-        'recents': recents
+        'recents': recents,
+        'all': related_news,
+        
     }
     return render(request, 'news.html', context)
 
@@ -90,7 +93,7 @@ def category_sorted(request, id):
     context = {
         'news':news,
         'categories': models.Category.objects.all(),
-        'id': id
+        'id': models.Category.objects.get(id = id)
     }
     return render(request, 'category.html', context)
 
