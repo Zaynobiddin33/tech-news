@@ -120,5 +120,6 @@ def search (request):
     news = p.get_page(page)
     context = {
         'news' : news,
+        'q':q
     }
     return render(request, 'search.html', context)
