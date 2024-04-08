@@ -3,6 +3,7 @@ from . import models
 import requests
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -13,6 +14,7 @@ from django.core.cache import cache
 import requests
 
 def main(request):
+
     main = models.News.objects.filter(is_essential=True).order_by('-id').first()
     main3 = models.News.objects.filter(is_essential=True).order_by('-id')[1:4]
     newest5 = models.News.objects.filter(is_essential=False).order_by('-id')[:5]
@@ -74,7 +76,24 @@ def category(request):
 
 
 def news(request, id):
+    # ip = request.META.get('REMOTE_ADDR')
+    ip = request.META.get('HTTP_X_FORWARDED_FOR')
+    if not ip:
+        ip = request.META.get('REMOTE_ADDR')
+    print()
+    print(ip)
+    print()
     news = models.News.objects.get(id = id)
+    if models.Ip_view.objects.filter(ip = ip, news = news).first():
+        pass
+    else:
+        models.Ip_view.objects.create(
+            ip = ip,
+            news = news
+        )
+        news.views+=1
+        news.save()
+    
     recents = models.News.objects.filter().order_by('-id').exclude(id=id)[:10]
     related_news = models.News.objects.filter(category = news.category).exclude(id = id)[:6]
     context = {
@@ -97,6 +116,8 @@ def category_sorted(request, id):
     }
     return render(request, 'category.html', context)
 
+
+@csrf_exempt
 def contact(request):
     if request.method == 'POST':
         message = request.POST['message']
@@ -123,3 +144,5 @@ def search (request):
         'q':q
     }
     return render(request, 'search.html', context)
+
+

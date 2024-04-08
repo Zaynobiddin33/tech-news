@@ -21,6 +21,21 @@
     </div>
 </div>
 {%endblock%}
+
+{%block loading%}
+    <div id="preloader-active">
+      <div class="preloader d-flex align-items-center justify-content-center">
+          <div class="preloader-inner position-relative">
+              <div class="preloader-circle"></div>
+              <div class="preloader-img pere-text">
+                  <img src="{% static 'assets/img/logo/logo.png'%}" alt="">
+              </div>
+          </div>
+      </div>
+  </div>
+{%endblock%}
+
+
 {%block content%}
     <main>
     <!-- Trending Area Start -->
@@ -159,7 +174,7 @@
 
                                     </style>
                                         {%for i in all%}
-                                        <div class="col-lg-4 col-md-6 mb-4 col-6  ">
+                                        <div class="col-lg-4 col-md-6 mb-4 col-12  ">
                                             <a href="{%url 'news' i.id%}">
                                                 <div class="single-what-news">
                                                     <div class="news-card">
@@ -167,7 +182,7 @@
                                                             <img src="{{ i.banner_image.url }}" alt="News Image">
                                                         </div>
                                                         <div class="news-content" style="height: 130px;">
-                                                            <h3 class="news-title">{{ i.title }}</h3>
+                                                            <h5 class="news-title">{{ i.title }}</h5>
                                                             <p class="news-category">{{ i.category }}</p>
 
                                                           

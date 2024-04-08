@@ -22,14 +22,14 @@
                             <!--Nav Button  -->                                            
                             <nav>                                                                     
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    {%if id == 0%}
+                                    {%if id == 'All'%}
                                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="{%url 'category'%}">All</a>
                                     {%else%}
                                     <a class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" href="{%url 'category'%}">All</a>
                                     {%endif%}
 
                                     {%for i in categories%}
-                                        {%if id == i.id%}
+                                        {%if id.id == i.id%}
                                         <a class="nav-item nav-link active" href="{%url 'category_sorted' i.id%}" role="tab" aria-controls="nav-contact">{{i.name}} </a>
                                         {%else%}
                                         <a class="nav-item nav-link" href="{%url 'category_sorted' i.id%}" role="tab" aria-controls="nav-contact">{{i.name}} </a>

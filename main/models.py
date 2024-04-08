@@ -35,3 +35,6 @@ class Contact(models.Model):
     class Meta:
         verbose_name = 'message'
 
+class Ip_view(models.Model):
+    ip = models.CharField(max_length = 40)
+    news = models.ForeignKey(News, on_delete = models.CASCADE)
