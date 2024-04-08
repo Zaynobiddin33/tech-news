@@ -76,24 +76,9 @@ def category(request):
 
 
 def news(request, id):
-    # ip = request.META.get('REMOTE_ADDR')
-    ip = request.META.get('HTTP_X_FORWARDED_FOR')
-    if not ip:
-        ip = request.META.get('REMOTE_ADDR')
-    print()
-    print(ip)
-    print()
     news = models.News.objects.get(id = id)
-    if models.Ip_view.objects.filter(ip = ip, news = news).first():
-        pass
-    else:
-        models.Ip_view.objects.create(
-            ip = ip,
-            news = news
-        )
-        news.views+=1
-        news.save()
-    
+    news.views+=1
+    news.save()
     recents = models.News.objects.filter().order_by('-id').exclude(id=id)[:10]
     related_news = models.News.objects.filter(category = news.category).exclude(id = id)[:6]
     context = {
@@ -115,6 +100,7 @@ def category_sorted(request, id):
         'id': models.Category.objects.get(id = id)
     }
     return render(request, 'category.html', context)
+
 
 
 @csrf_exempt
