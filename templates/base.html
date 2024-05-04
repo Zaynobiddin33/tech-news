@@ -109,8 +109,13 @@
                                         <a href="index.html"><img src="{% static 'assets/img/logo/logo.png'%}" alt=""></a>
                                     </div> -->
                                 <!-- Main-menu -->
-                                <div class="main-menu  d-md-block">
-                                    <nav>                  
+                                <style>
+                                  .navig li a{
+                                    padding: 25px 19px !important;
+                                  }
+                                </style>
+                                <div class="main-menu  d-md-block align-items" style="height: 70px;">
+                                    <nav class="navig">                  
                                         <ul id="navigation">    
                                             <li><a href="{%url 'main'%}">Asosiy sahifa</a></li>
                                             <li><a href="{%url 'category' %}">Kategoriyar</a></li>
