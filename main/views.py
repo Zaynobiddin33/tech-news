@@ -70,7 +70,7 @@ def category(request):
     context = {
         'news':news,
         'categories': models.Category.objects.all(),
-        'id': 'All'
+        'id': 'Barcha'
     }
     return render(request, 'category.html', context)
 
