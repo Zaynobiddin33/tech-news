@@ -65,11 +65,13 @@
             <link rel="stylesheet" href="{% static 'assets/css/animate.min.css'%}">
             <link rel="stylesheet" href="{% static 'assets/css/magnific-popup.css'%}">
             <link rel="stylesheet" href="{% static 'assets/css/fontawesome-all.min.css'%}">
-            <link rel="stylesheet" href="{% static 'assets/css/themify-icons.css'%}">
-            <link rel="stylesheet" href="{% static 'assets/css/slick.css'%}">
-            <link rel="stylesheet" href="{% static 'assets/css/nice-select.css'%}">
+            <!-- <link rel="stylesheet" href="{% static 'assets/css/themify-icons.css'%}"> -->
+            <!-- <link rel="stylesheet" href="{% static 'assets/css/slick.css'%}"> -->
+            <!-- <link rel="stylesheet" href="{% static 'assets/css/nice-select.css'%}"> -->
             <link rel="stylesheet" href="{% static 'assets/css/style.css'%}">
    </head>
+  <body>
+    
 
        
     <!-- Preloader Start -->
@@ -110,10 +112,10 @@
                                 <div class="main-menu  d-md-block">
                                     <nav>                  
                                         <ul id="navigation">    
-                                            <li><a href="{%url 'main'%}">Home</a></li>
-                                            <li><a href="{%url 'category' %}">Category</a></li>
+                                            <li><a href="{%url 'main'%}">Asosiy sahifa</a></li>
+                                            <li><a href="{%url 'category' %}">Kategoriyar</a></li>
                                             <!-- <li><a href="about.html">About</a></li> -->
-                                            <li><a href="{%url 'contact'%}">Contact</a></li>
+                                            <li><a href="{%url 'contact'%}">Aloqa</a></li>
                                             
                                         </ul>
                                     </nav>
@@ -290,10 +292,10 @@
                   </a></li>
               </ul>
               <ul class="menu">
-                <li class="menu__item"><a class="menu__link" href="{%url 'main'%}">Home</a></li>
-                <li class="menu__item"><a class="menu__link" href="{%url 'category'%}">Category</a></li>
+                <li class="menu__item"><a class="menu__link" href="{%url 'main'%}">Asosiy sahifa</a></li>
+                <li class="menu__item"><a class="menu__link" href="{%url 'category'%}">Kategoriyalar</a></li>
                 <!-- <li class="menu__item"><a class="menu__link" href="#">Team</a></li> -->
-                <li class="menu__item"><a class="menu__link" href="{%url 'contact'%}">Contact</a></li>
+                <li class="menu__item"><a class="menu__link" href="{%url 'contact'%}">Aloqa</a></li>
           
               </ul>
               <p>&copy;{% now 'Y' %}  | All Rights Reserved</p>
