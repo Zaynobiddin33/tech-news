@@ -88,57 +88,63 @@
                                     <div class="row">
                                         <style>
                                             .news-card {
-                                            background-color: #fff;
-                                            border-radius: 10px;
-                                            overflow: hidden;
-                                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                                            margin-bottom: 20px;
-                                        }
+                                                background-color: #fff;
+                                                border-radius: 10px;
+                                                overflow: hidden;
+                                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                                margin-bottom: 20px;
+                                            }
                                         
-                                        .news-image {
-                                            height: 200px; /* Adjust as needed */
-                                            overflow: hidden;
-                                            background-repeat: no-repeat;
-                                            background-size: 100%;
-                                            align-items: end;
-                                            display: flex;
-                                        }
+                                            .news-image {
+                                                height: 200px; /* Adjust as needed */
+                                                overflow: hidden;
+                                                background-repeat: no-repeat;
+                                                background-size: 100%;
+                                                align-items: end;
+                                                display: flex;
+                                            }
                                         
+                                            .news-content {
+                                                display: flex;
+                                                flex-direction: column;
+                                                height: 170px;
+                                            }
                                         
-                                        .news-content {
-                                            padding: 20px;
-                                        }
+                                            .news-title {
+                                                font-size: 1.2rem;
+                                                margin-bottom: 10px;
+                                            }
                                         
-                                        .news-title {
-                                            font-size: 1.2rem;
-                                            margin-bottom: 10px;
-                                        }
+                                            .news-category {
+                                                font-size: 0.9rem;
+                                                color: #888;
+                                            }
                                         
-                                        .news-category {
-                                            font-size: 0.9rem;
-                                            color: #888;
-                                        }
-                                        
+                                            .news-details {
+                                                margin-top: auto;
+                                            }
                                         </style>
-                                        {%for i in news%}
+                                        
+                                        {% for i in news %}
                                         <div class="col-lg-4 col-md-6 mb-4">
-                                            <a href="{%url 'news' i.id%}">
+                                            <a href="{% url 'news' i.id %}">
                                                 <div class="single-what-news">
                                                     <div class="news-card">
                                                         <div class="news-image" style="background-image: url({{i.banner_image.url}});">
                                                             <!-- <img src="{{ i.banner_image.url }}" alt="News Image"> -->
                                                             <p style="background-color: rgb(0, 145, 255); padding: 10px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; color: white;" class="news-category">{{ i.category }}</p>
-
                                                         </div>
-                                                        <div class="news-content" style="height: 170px;">
+                                                        <div class="news-content p-1">
                                                             <h3 class="news-title">{{ i.title }}</h3>
-                                                            
+                                                            <p class="news-details p-2"><i class="fa fa-calendar"></i> {{ i.created_at.date }}</p>
                                                         </div>
                                                     </div>
+                                                </div>
                                             </a>
-                                            </div>
                                         </div>
-                                        {%endfor%}
+                                        {% endfor %}
+                                        
+                                        
                                     </div>
                                 </div>
                             </div>
