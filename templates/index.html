@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-xl-8 col-lg-7">
                         <!-- Trending Top -->
-                        <a href="{%url 'news' main.id%}">
+                        <a href="{%url 'news' main.slug%}">
                             <div class="trending-top mb-30">
                                 <div class="trend-top-img">
                                     <img src="{{main.banner_image.url}}" alt="">
@@ -64,7 +64,7 @@
                             <div class="row">
                                 {%for i in main3%}
                                 <div class="col-lg-4 col-md-4">
-                                    <a href="{%url 'news' i.id%}">
+                                    <a href="{%url 'news' i.slug%}">
                                 <div class="single-bottom mb-35">
                                     <div class="trend-bottom-img mb-30" style="overflow: hidden; height: 150px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-position: center; background-repeat: no-repeat;">
                                         
@@ -88,7 +88,7 @@
                         <h3>So'ngi yangiliklar</h3>
                         {%for i in newest5%}
                         
-                        <a href="{%url 'news' i.id %}">
+                        <a href="{%url 'news' i.slug %}">
                         <div class="trand-right-single d-flex">
                             <div class="trand-right-img image col-4" style=" overflow: hidden; height: 100px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-repeat: no-repeat; background-position: center;">
                                
@@ -175,7 +175,7 @@
                                     </style>
                                         {%for i in all%}
                                         <div class="col-lg-4 col-md-6 mb-4 col-12  ">
-                                            <a href="{%url 'news' i.id%}">
+                                            <a href="{%url 'news' i.slug%}">
                                                 <div class="single-what-news">
                                                     <div class="news-card">
                                                         <div class="news-image">

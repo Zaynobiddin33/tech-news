@@ -38,7 +38,7 @@
                      {%for i in recents%}
                     
                         <div class="media post_item">
-                            <a href="{%url 'news' i.id%}">
+                            <a href="{%url 'news' i.slug%}">
                            <div style="width: 100px; height: 100px; background-image: url({{i.banner_image.url}}); background-size: 100%; background-position: center; background-repeat: no-repeat;"></div>
                             </a>
                            <div class="media-body">
@@ -109,7 +109,7 @@
                                     
                                         <div class="single-what-news">
                                             <div class="news-card">
-                                                <a href="{%url 'news' i.id%}">
+                                                <a href="{%url 'news' i.slug%}">
                                                     <div class="news-image">
                                                         <img src="{{ i.banner_image.url }}" alt="News Image">
                                                     </div>
