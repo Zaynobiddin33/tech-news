@@ -75,12 +75,12 @@ def category(request):
     return render(request, 'category.html', context)
 
 
-def news(request, id):
-    news = models.News.objects.get(id = id)
+def news(request, slug):
+    news = models.News.objects.get(slug = slug)
     news.views+=1
     news.save()
-    recents = models.News.objects.filter().order_by('-id').exclude(id=id)[:10]
-    related_news = models.News.objects.filter(category = news.category).exclude(id = id)[:6]
+    recents = models.News.objects.filter().order_by('-id').exclude(slug=slug)[:10]
+    related_news = models.News.objects.filter(category = news.category).exclude(slug = slug)[:6]
     context = {
         'news':news,
         'recents': recents,

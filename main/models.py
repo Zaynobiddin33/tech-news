@@ -14,6 +14,7 @@ class Category(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length = 255)
+    slug = models.SlugField(unique=True, max_length=200)
     category = models.ForeignKey(Category, on_delete = models.SET_NULL, null = True)
     text = RichTextUploadingField()
     is_essential = models.BooleanField(default = False)
