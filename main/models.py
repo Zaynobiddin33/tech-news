@@ -3,7 +3,6 @@ from ckeditor_uploader.fields import RichTextUploadingField
 import os
 from django.conf import settings
 
-basedir = settings.BASE_DIR
 
 # Create your models here.
 
@@ -24,12 +23,7 @@ class News(models.Model):
     def __str__(self) -> str:
         return self.title
     
-    def delete(self, *args, **kwargs):
-        print(self.banner_image.url)
-        if os.path.exists(self.banner_image.url):
-            os.remove(f"{basedir}{self.banner_image.url}")
-        else:
-            print(f"File '{basedir}{self.banner_image.url}' does not exist.")
+
         
 
 
