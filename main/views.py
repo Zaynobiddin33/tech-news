@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from . import models
 import requests
 from django.core.paginator import Paginator
@@ -76,7 +76,7 @@ def category(request):
 
 
 def news(request, slug):
-    news = models.News.objects.get(slug = slug)
+    news = get_object_or_404(models.News, slug=slug)
     news.views+=1
     news.save()
     recents = models.News.objects.filter().order_by('-id').exclude(slug=slug)[:10]
