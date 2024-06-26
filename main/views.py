@@ -261,8 +261,8 @@ def short_news(request):
     news = paginator.get_page(page_number)
 
     context = {
-        'page_obj': news,
-        'news': news
+        'page_obj': news_list,
+        'news': news_list
     }
     return render(request, 'shorts.html', context)
 
