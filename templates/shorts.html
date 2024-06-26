@@ -1,0 +1,87 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block title%}
+    Qisqa habarlar
+{%endblock%}
+{%block content%}
+ <style>
+     body{
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+     }
+      .image{
+          border-radius: 20px;
+      }
+ </style>
+    <div class="container">
+     <div class="row m-2 infinite-container grid cont"  id="newsss"> <!-- data-masonry='{"percentPosition": true }'  -->
+        {%for i in news%}
+          <div class="col-6 col-xs-6 col-sm-6 col-lg-4 col-xl-3 p-2 grid-item post">
+               <div class="image-wrapper" style="width:250px; border-radius: 20px; background-color: rgb(164, 164, 164); height: calc((250px / {{i.image_width}}) * {{i.image_height}});">
+                <img class="image lazyload" src="{{i.image_url}}" alt="" style="width: 100%; margin: 0;">
+                
+               </div>
+               <div class="col-12 px-2 pt-1">
+                    <h6 style="font-size: 14px;">{{i.content}}</h6>
+               </div>
+               <div class="col-12 d-flex align-items-center px-1">
+                    <div style="width: 35px; height: 35px; border-radius: 50%;  background-image: url({{i.author_pic}}); background-repeat: no-repeat; background-size: 100%;"></div>
+                    <p style="margin: -1px; padding-left: 7px;">{{i.author}}</p>
+               </div>
+               <div></div>
+          </div>
+          
+        {%endfor%}
+
+        
+        <!-- {% if page_obj.has_next %}
+                <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+        {% endif %} -->
+         </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+        var elem = document.querySelector('.grid');
+        var msnry = new Masonry( elem, {
+        // options
+        itemSelector: '.grid-item',
+        columnWidth: 200
+        });
+
+        // element argument can be a selector string
+        //   for an individual element
+        var msnry = new Masonry( '.grid', {
+        // options
+        });
+    </script>
+
+    <!-- infinite scroll -->
+
+    <script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
+
+
+<script>
+    $('.grid').infiniteScroll({
+    path: '.next',
+    append: '.post',
+    status: '.scroller-status',
+    hideNav: '.pagination',
+    });
+
+</script>
+    
+
+<script>
+    
+</script>
+
+
+
+
+
+    
+  
+{%endblock%}

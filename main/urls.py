@@ -8,6 +8,13 @@ urlpatterns = [
     path('news/<str:slug>', views.news, name = 'news'),
     path('contact', views.contact, name = 'contact'),
     path('search', views.search, name = 'search'),
+    path('check', views.check, name = 'check'),
+    path('check/accept/<int:id>', views.accept, name = 'accept'),
+    path('check/deny/<int:id>', views.deny, name = 'deny'),
+    path('check/deny/', views.deny, name = 'deny_all'),
+    path('getnews/<str:name>', views.get_news, name = 'getnews'),
+    path('search_reddit/', views.search_reddit, name = 'search_reddit'),
+    path('shorts', views.short_news, name = 'short_news'),
 
 
 

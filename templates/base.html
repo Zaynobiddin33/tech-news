@@ -55,6 +55,8 @@
         <link rel="icon" href="{%static 'assets/img/logo-load.png' %}" type="image/png">
         <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
         <script src="{% static 'ckeditor/ckeditor/ckeditor-init.js' %}"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js" integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp" crossorigin="anonymous"></script>
 
 		<!-- CSS here -->
             <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css'%}">
@@ -100,10 +102,11 @@
                         </div>
                    </div>
                 </div>
+                
                <div class="header-bottom">
-                    <div class="container">
+                    <div class="container p-0 m-0">
                         <div class="row align-items-center m-0">
-                            <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
+                            <div class="col-xl-10 col-lg-10 col-md-12 header-flex p-0">
                                 <!-- sticky -->
                                     <!-- <div class="sticky-logo">
                                         <a href="index.html"><img src="{% static 'assets/img/logo/logo.png'%}" alt=""></a>
@@ -114,16 +117,19 @@
                                     padding: 25px 19px !important;
                                   }
                                 </style>
-                                <div class="main-menu  d-md-block align-items" style="height: 70px;">
-                                    <nav class="navig">                  
-                                        <ul id="navigation">    
-                                            <li><a href="{%url 'main'%}">Asosiy sahifa</a></li>
-                                            <li><a href="{%url 'category' %}">Kategoriyar</a></li>
+                                <div class="main-menu  d-md-block align-items p-0" style="height: 70px;">
+                                    <nav class="navig d-flex justify-content-center">                  
+                                        <ul id="navigation d-flex p-0 m-0">    
+                                            <li><a style="font-size: 11px;"  href="{%url 'main'%}">Asosiy sahifa</a></li>
+                                            <li><a style="font-size: 11px;"  href="{%url 'category' %}">Kategoriyar</a></li>
                                             <!-- <li><a href="about.html">About</a></li> -->
-                                            <li><a href="{%url 'contact'%}">Aloqa</a></li>
+                                            <li><a style="font-size: 11px;"  href="{%url 'contact'%}">Aloqa</a></li>
+                                            <li><a style="font-size: 11px;"  href="{%url 'short_news'%}">Qisqa yangiliklar</a></li>
+
                                             
                                         </ul>
                                     </nav>
+                                    
                                 </div>
                             </div>             
                             <div class="col-xl-2 col-lg-2 col-md-4">
@@ -148,6 +154,7 @@
        </div>
         <!-- Header End -->
     </header>
+    
 
 
 

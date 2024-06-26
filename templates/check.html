@@ -1,0 +1,82 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cards Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="row">
+            {%for name in channels%}
+            <div class="col-2 p-2">
+                <a href="{%url 'getnews' name.name%}">
+                    <button class="btn btn-primary"> {{name.name}}</button>
+                </a>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+    <div class="container ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-2 p-2 ">
+                <a class="position-fixed" href="{%url 'deny_all'%}" style="z-index: 100;">
+                    <button class="btn btn-danger"> Clear all</button>
+                </a>
+            </div>
+            <div class="col-6"></div>
+            <div class="col-4 p-2">
+                <form method="post" action="{%url 'search_reddit'%}">
+                    {% csrf_token %}
+                    <input type="text" name="name" id="">
+                    <button>search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+<div class="container mt-5">
+    <div class="row">
+        <!-- Card 1 -->
+        {%for i in not_accepted %}
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {%if i.video%}
+                {{i.video | safe}}
+                {%else%}
+                <img src="{{i.image_url}}" class="card-img-top" alt="Image 1" style="height: fit-content;">
+                {%endif%}
+                <div class="card-body">
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background-image: url({{i.author_pic}}); background-repeat: no-repeat; background-size: 100%;">
+                        
+                    </div>
+                    <h5 class="card-title">{{i.author}}</h5>
+                    <form action="{%url 'accept' i.id%}" method="post"> {%csrf_token%}
+                        <textarea style="min-height: 200px; min-width: 300px;" name="text" id="">{{i.content}}</textarea>
+                        <br>
+                        <button class="btn btn-success">Accept</button>
+                    </form>
+                    <a href="{%url 'deny' i.id%}" class="btn btn-danger">Deny</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

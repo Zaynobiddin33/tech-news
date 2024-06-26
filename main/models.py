@@ -45,3 +45,24 @@ class Contact(models.Model):
 class Ip_view(models.Model):
     ip = models.CharField(max_length = 40)
     news = models.ForeignKey(News, on_delete = models.CASCADE)
+
+class ShortNews(models.Model):
+    image_url = models.URLField(null=True)
+    is_accepted = models.BooleanField(default=False)
+    published_at = models.DateTimeField(auto_now_add=True)
+    author = models.CharField(max_length=100)
+    content = models.TextField(unique=True)
+    author_image_url = models.URLField(null=True)
+    author_pic = models.URLField(null=True, default=None)
+    image_width = models.IntegerField()
+    image_height = models.IntegerField()
+    video = models.TextField(null=True)
+
+    def __str__(self) -> str:
+        return self.content
+
+class Reddit_channel(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.name
