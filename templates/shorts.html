@@ -8,34 +8,125 @@
      body{
           font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
      }
-      .image{
-          border-radius: 20px;
-      }
  </style>
+     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            /* display: flex; */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f9fc;
+            margin: 0;
+        }
+        .card {
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            border-radius: 15px;
+            box-shadow: 20px 20px 50px #d9d9d9,
+                        -20px -20px 50px #ffffff;
+            overflow: hidden;
+            /* width: 350px; */
+            margin: 20px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 20px;
+            position: relative;
+        }
+        .card-content h3 {
+            margin: 0;
+            font-size: 22px;
+            color: #333;
+            font-weight: 700;
+        }
+        .card-content p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+        }
+        .card-footer {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f0f0f0;
+        }
+        .card-footer img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            margin-right: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-footer .username {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+    </style>
+<style>
+    /* HTML: <div class="loader"></div> */
+.loader,
+.loader:before,
+.loader:after{
+  width: 35px;
+  aspect-ratio: 1;
+  box-shadow: 0 0 0 3px inset #fff;
+  position: relative;
+  animation: l6 1.5s infinite 0.5s;
+}
+.loader:before,
+.loader:after{
+  content: "";
+  position: absolute;
+  left: calc(100% + 5px);
+  animation-delay: 1s;
+}
+.loader:after{
+  left: -40px;
+  animation-delay: 0s;
+}
+@keyframes l6 {
+  0%,55%,100%  {border-radius:0  }
+  20%,30%      {border-radius:50%}
+}
+</style>
     <div class="container">
      <div class="row m-2 infinite-container grid cont"  id="newsss"> <!-- data-masonry='{"percentPosition": true }'  -->
         {%for i in news%}
-          <div class="col-6 col-xs-6 col-sm-6 col-lg-4 col-xl-3 p-2 grid-item post">
-               <div class="image-wrapper" style="width:250px; border-radius: 20px; background-color: rgb(164, 164, 164); height: calc((250px / {{i.image_width}}) * {{i.image_height}});">
-                <img class="image lazyload" src="{{i.image_url}}" alt="" style="width: 100%; margin: 0;">
-                
-               </div>
-               <div class="col-12 px-2 pt-1">
-                    <h6 style="font-size: 14px;">{{i.content}}</h6>
-               </div>
-               <div class="col-12 d-flex align-items-center px-1">
-                    <div style="width: 35px; height: 35px; border-radius: 50%;  background-image: url({{i.author_pic}}); background-repeat: no-repeat; background-size: 100%;"></div>
-                    <p style="margin: -1px; padding-left: 7px;">{{i.author}}</p>
-               </div>
-               <div></div>
+          <div class="col-12 col-xs-6 col-sm-6 col-lg-6 col-xl-4 mb-4 grid-item post">
+            <div class="card">
+                <img src="{{i.image_url}}" alt="News Image">
+                <div class="card-content">
+                    <p>{{i.content}}</p>
+                </div>
+                <div class="card-footer">
+                    <img src="{{i.author_pic}}" alt="User Profile Picture">
+                    
+                    <span class="username">{{i.author}}</span>
+                </div>
+            </div>
           </div>
           
         {%endfor%}
 
-        
-        <!-- {% if page_obj.has_next %}
-                <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
-        {% endif %} -->
+        {% if page_obj.has_next %}
+               <div class="pagination">
+                    <a class="next" href="?page={{ news.next_page_number }}"></a>
+               </div>
+               <div class="loader"></div>
+        {% endif %}
          </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -64,18 +155,14 @@
 
 
 <script>
-    $('.grid').infiniteScroll({
+var elem2 = document.querySelector('.grid');
+var infScroll = new InfiniteScroll( '.grid', {
     path: '.next',
-    append: '.post',
-    status: '.scroller-status',
-    hideNav: '.pagination',
+    append: '.grid-item',
+    outlayer: msnry,
+    history: false,
+    status: '.loader',
     });
-
-</script>
-    
-
-<script>
-    
 </script>
 
 

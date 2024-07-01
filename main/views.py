@@ -161,7 +161,7 @@ def search (request):
 @login_required(login_url='main')
 def check(request):
     if request.user.is_superuser:
-        not_accepted = models.ShortNews.objects.filter(is_accepted = False).order_by('-id')
+        not_accepted = models.ShortNews.objects.filter(is_accepted = False).order_by('id')
         channels = models.Reddit_channel.objects.all()
     else:
         return redirect('main')
@@ -254,15 +254,15 @@ def get_news(request, name):
     return redirect('check')
 
 def short_news(request):
-    news_list = models.ShortNews.objects.filter(is_accepted=True)
-    paginator = Paginator(news_list, 30)
+    news_list = models.ShortNews.objects.filter(is_accepted=True).order_by('-id')
+    paginator = Paginator(news_list, 10)
     page_number = int(request.GET.get('page', 1))
 
     news = paginator.get_page(page_number)
 
     context = {
-        'page_obj': news_list,
-        'news': news_list
+        'page_obj': news,
+        'news': news
     }
     return render(request, 'shorts.html', context)
 
@@ -289,7 +289,7 @@ def search_reddit(request):
         subreddit = reddit.subreddit(subreddit_name)
 
         # Fetch the latest posts
-        latest_posts = subreddit.hot(limit=10)
+        latest_posts = subreddit.hot(limit=30)
         for post in latest_posts:
         # print(post.title)  # Print titles of posts
         # print(post.url)    # Print URLs of posts
