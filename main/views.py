@@ -246,7 +246,8 @@ def get_news(request, name):
                 content = result['result']['text'],
                 author_pic = profile_picture_url,
                 image_height = post.preview['images'][0]['source']['height'],
-                image_width = post.preview['images'][0]['source']['width']
+                image_width = post.preview['images'][0]['source']['width'],
+                reddit_url = post.shortlink
             )
         except:
             pass
@@ -331,7 +332,8 @@ def search_reddit(request):
                     author_pic = profile_picture_url,
                     image_height = post.preview['images'][0]['source']['height'],
                     image_width = post.preview['images'][0]['source']['width'],
-                    video = post.media['oembed']['html']
+                    video = post.media['oembed']['html'],
+                    reddit_url = post.shortlink
                 )
                 except:
                     pass
@@ -343,8 +345,51 @@ def search_reddit(request):
                     content = result['result']['text'],
                     author_pic = profile_picture_url,
                     image_height = post.preview['images'][0]['source']['height'],
-                    image_width = post.preview['images'][0]['source']['width']
+                    image_width = post.preview['images'][0]['source']['width'],
+                    reddit_url = post.shortlink
                 )
                 except:
                     pass
         return redirect('check')
+    
+def short_details(request, slug):
+    image = models.ShortNews.objects.get(slug = slug)
+    view_key = f'viewed_{image.id}'
+    if not request.session.get(view_key, False) and request.method == "GET":
+        image.views+=1
+        image.save()
+        request.session[view_key] = True
+    next_news = models.ShortNews.objects.filter(id__lt = image.id).order_by('-id').first()
+    prev_news = models.ShortNews.objects.filter(id__gt = image.id).order_by('id').first()
+    comments = models.Shorts_comments.objects.filter(short_news = image).order_by('-created_at')
+    user_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', None))
+    if comments.first() == None:
+        comments = None
+    if request.method == 'POST':
+        name = request.POST['name']
+        comment = request.POST['comment']
+        models.Shorts_comments.objects.create(
+            creator = name,
+            comment = comment,
+            short_news = models.ShortNews.objects.get(slug = slug)
+        )
+    if models.Shorts_like.objects.filter(short_news = image, user = user_ip).first() == None:
+        is_liked = False
+    else:
+        is_liked = True
+    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'is_liked':is_liked})
+
+def like(request, slug):
+    news = models.ShortNews.objects.get(slug = slug)
+    user_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', None))
+    models.Shorts_like.objects.create(
+        short_news = news,
+        user = user_ip
+    )
+    return redirect('short_details', slug)
+
+def dislike(request, slug):
+    user_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', None))
+    like_obj = models.Shorts_like.objects.get(short_news = models.ShortNews.objects.get(slug = slug), user = user_ip )
+    like_obj.delete()
+    return redirect('short_details', slug)

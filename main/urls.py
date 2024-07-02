@@ -15,6 +15,9 @@ urlpatterns = [
     path('getnews/<str:name>', views.get_news, name = 'getnews'),
     path('search_reddit/', views.search_reddit, name = 'search_reddit'),
     path('shorts', views.short_news, name = 'short_news'),
+    path('shorts/<str:slug>/', views.short_details, name = 'short_details'),
+    path('like-short/<str:slug>', views.like, name = 'like'),
+    path('dislike-short/<str:slug>', views.dislike, name = 'dislike')
 
 
 

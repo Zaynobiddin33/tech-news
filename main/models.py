@@ -2,6 +2,7 @@ from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 import os
 from django.conf import settings
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -52,11 +53,23 @@ class ShortNews(models.Model):
     published_at = models.DateTimeField(auto_now_add=True)
     author = models.CharField(max_length=100)
     content = models.TextField(unique=True)
-    author_image_url = models.URLField(null=True)
     author_pic = models.URLField(null=True, default=None)
     image_width = models.IntegerField()
     image_height = models.IntegerField()
     video = models.TextField(null=True)
+    views = models.IntegerField(default=0)
+    shares = models.IntegerField(default=0)
+    slug = models.SlugField(max_length=200, unique=True)
+    reddit_url = models.URLField(null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.content)
+        elif self.pk:
+            news = ShortNews.objects.get(pk = self.pk)
+            if news.content != self.content:
+                self.slug = slugify(self.content)
+        super(ShortNews, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.content
@@ -66,3 +79,19 @@ class Reddit_channel(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+class Shorts_comments(models.Model):
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    creator = models.TextField()
+    short_news = models.ForeignKey(ShortNews, on_delete=models.CASCADE)
+
+class Shorts_like(models.Model):
+    short_news = models.ForeignKey(ShortNews, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100)
+
+    class Meta:
+        unique_together = ('short_news', 'user')
+
+    def __str__(self) -> str:
+        return self.user
