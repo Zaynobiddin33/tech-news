@@ -129,9 +129,14 @@
         .go-back{
             margin: 20px;
             transition: 0.5s;
+            background-color: white;
+            box-shadow: 5px 5px 50px rgb(202, 202, 202);
         }
         .go-back:hover{
             background-color: #d9d9d9;
+        }
+        .redditor span:hover{
+            text-decoration: underline;
         }
     </style>
    <!-- <a href="{%url 'short_news'%}"> <button  class="nav-button-go go-back">&larr;</button></a> -->
@@ -156,12 +161,12 @@
                                         {%if is_liked == False%}
                                         <div class="d-flex align-items-center">
                                             <a href="{%url 'like' image.slug%}"><button class="circle"><i class="bi bi-heart"></i></button></a>
-                                            <span style="margin: 0 10px 0 10px;">{{image.likes}}</span>
+                                            <span style="margin: 0 10px 0 10px;">{{likes}}</span>
                                         </div>
                                         {%else%}
                                         <div class="d-flex align-items-center">
                                             <a href="{%url 'dislike' image.slug%}"><button class="circle"><i style="color: red;" class="bi bi-heart-fill"></i></button></a>
-                                            <span style="margin: 0 10px 0 10px;">{{image.likes}}</span>
+                                            <span style="margin: 0 10px 0 10px;">{{likes}}</span>
                                         </div>
                                         {%endif%}
                                         <div class="d-flex align-items-center">
@@ -179,7 +184,7 @@
                             <div class=" d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <div class="profile" style="width: 50px; height: 50px; background-image: url({{image.author_pic}}); border-radius: 50%; background-size: 100%;"></div>
-                                    <a style="text-decoration: none; color: rgb(15, 15, 24);" href="https://www.reddit.com/user/{{image.author}}"><span style="font-size: 20px; margin:0 20px 0 20px;" class="username">{{image.author}}</span></a>
+                                    <a class="redditor" style="text-decoration: none; color: rgb(15, 15, 24); transition: 0.5s;" href="https://www.reddit.com/user/{{image.author}}"><span style="font-size: 20px; margin:0 20px 0 20px;" class="username">{{image.author}}</span></a>
                                 </div>
                                 <a href="{{image.reddit_url}}"><button class="follow btn">Reddit manbaa</button></a>
                             </div>
@@ -200,7 +205,8 @@
                                     {%for i in comments%}
                                     <div class="comment">
                                         <h6 style="display: inline-block;"> {{i.creator}}</h6>
-                                        <span style="margin-left: 10px;">{{i.comment}}</span>
+                                        <span style="margin-left: 10px;">{{i.created_at.date}}</span>
+                                        <h5 style="margin-left: 20px; font-weight: 300;">{{i.comment}}</h5>
                                     </div>
 
                                     {%endfor%}
@@ -209,7 +215,7 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 col-sm-12 p-2">
-                                <form method="post" class="">
+                                <form method="post" class="" >
                                     {%csrf_token%}
                                     <input class="name-input" type="text" placeholder="ismingiz..." required name="name">
                                     <div class="d-flex">

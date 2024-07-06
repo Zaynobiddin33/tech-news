@@ -290,7 +290,7 @@ def search_reddit(request):
         subreddit = reddit.subreddit(subreddit_name)
 
         # Fetch the latest posts
-        latest_posts = subreddit.hot(limit=30)
+        latest_posts = subreddit.top('all',limit=30)
         for post in latest_posts:
         # print(post.title)  # Print titles of posts
         # print(post.url)    # Print URLs of posts
@@ -373,11 +373,12 @@ def short_details(request, slug):
             comment = comment,
             short_news = models.ShortNews.objects.get(slug = slug)
         )
+    likes = models.Shorts_like.objects.filter(short_news = image).count()
     if models.Shorts_like.objects.filter(short_news = image, user = user_ip).first() == None:
         is_liked = False
     else:
         is_liked = True
-    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'is_liked':is_liked})
+    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'is_liked':is_liked, 'likes':likes})
 
 def like(request, slug):
     news = models.ShortNews.objects.get(slug = slug)
