@@ -13,7 +13,9 @@ from django.core.cache import cache
 import praw
 import time
 
-from googletrans import Translator
+from . import bot
+
+# from googletrans import Translator
 
 REDDIT_API = 'f0af863c-7380-4f72-b013-e3714699db6f:988ddf50-28fa-4148-9da7-23803484f7be'
 
@@ -174,6 +176,8 @@ def accept(request, id):
         model.is_accepted = True
         model.content = request.POST['text']
         model.save()
+    html_text = f'<a href="https://tech-news.uz/shorts/{model.slug}"> Saytda o`qish </a>'
+    bot.send_message_sync(model.content + '\n\n 👉🏻' + html_text, image_url=model.image_url)
     return redirect('check')
 
 @login_required(login_url='main')
@@ -186,7 +190,7 @@ def deny(request, id=None):
     return redirect('check')
 
 def get_news(request, name):
-    translator = Translator()
+    # translator = Translator()
     # Replace these values with your own Reddit API credentials
     REDDIT_CLIENT_ID = '4vyvkbUyrnVfaKQMLj7X5A'
     REDDIT_CLIENT_SECRET = 'vKzSPaHLgpifHObL4La8e2Wa-K8PBA'
@@ -270,7 +274,7 @@ def short_news(request):
 def search_reddit(request):
     if request.method == 'POST':
         name = request.POST['name']
-        translator = Translator()
+        # translator = Translator()
         # Replace these values with your own Reddit API credentials
         REDDIT_CLIENT_ID = '4vyvkbUyrnVfaKQMLj7X5A'
         REDDIT_CLIENT_SECRET = 'vKzSPaHLgpifHObL4La8e2Wa-K8PBA'
@@ -290,7 +294,7 @@ def search_reddit(request):
         subreddit = reddit.subreddit(subreddit_name)
 
         # Fetch the latest posts
-        latest_posts = subreddit.top('all',limit=30)
+        latest_posts = subreddit.hot(limit=30)
         for post in latest_posts:
         # print(post.title)  # Print titles of posts
         # print(post.url)    # Print URLs of posts
