@@ -49,9 +49,11 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>{%block title%}  {%endblock%}</title>
-        <meta name="description" content="">
+        {%block meta%}
+        {%endblock%}
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="manifest" href="site.webmanifest">
+        <meta name="keywords" content="tech, news, uz, technews, tech news uz, technology, texnologiya, ilm-fan, yangiliklar, technewsuz, technews uz, news uz, ">
         <link rel="icon" href="{%static 'assets/img/logo-load.png' %}" type="image/png">
         <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
         <script src="{% static 'ckeditor/ckeditor/ckeditor-init.js' %}"></script>
