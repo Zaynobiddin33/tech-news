@@ -176,6 +176,7 @@ def accept(request, id):
         model.is_accepted = True
         model.content = request.POST['text']
         model.save()
+    model = models.ShortNews.objects.get(id = id)
     html_text = f'<a href="https://tech-news.uz/shorts/{model.slug}"> Saytda o`qish </a>'
     bot.send_message_sync(model.content + '\n\n 👉🏻' + html_text, image_url=model.image_url)
     return redirect('check')
@@ -369,6 +370,9 @@ def short_details(request, slug):
     user_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', None))
     if comments.first() == None:
         comments = None
+        num_comments = 0
+    else:
+        num_comments = comments.count()
     if request.method == 'POST':
         name = request.POST['name']
         comment = request.POST['comment']
@@ -382,7 +386,8 @@ def short_details(request, slug):
         is_liked = False
     else:
         is_liked = True
-    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'is_liked':is_liked, 'likes':likes})
+    
+    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'num_comments':num_comments, 'is_liked':is_liked, 'likes':likes})
 
 def like(request, slug):
     news = models.ShortNews.objects.get(slug = slug)
