@@ -13,35 +13,12 @@ from django.core.cache import cache
 import praw
 import time
 from translate import Translator
-
+import html
 from . import bot
 
 # from googletrans import Translator
 
 REDDIT_API = 'f0af863c-7380-4f72-b013-e3714699db6f:988ddf50-28fa-4148-9da7-23803484f7be'
-
-def translation(api_key, text, source_lang, target_lang):    
-    url = 'https://mohir.ai/api/v1/translate'
-    data = {
-        "text": text,
-        "src": source_lang,
-        "tgt": target_lang,
-        "blocking": "true",
-        # "webhook_notification_url": "https://example.com"
-    }
-    headers = {
-        'Authorization': api_key,
-        'Content-Type': 'application/json'
-    }
-    
-    try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return f"Request failed with status code {response.status_code}: {response.text}"
-    except requests.exceptions.Timeout:
-        return "Request timed out. The API response took too long to arrive."
 
 def main(request):
 
@@ -194,6 +171,7 @@ def deny(request, id=None):
 def translate_text(text, source_lang, target_lang):
     translator = Translator(from_lang=source_lang, to_lang=target_lang)
     translation = translator.translate(text)
+    translation = html.unescape(translation)
     return translation
 
 def get_news(request, name):
