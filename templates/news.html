@@ -3,6 +3,11 @@
 {%block title%}
    {{news.title}}
 {%endblock%}
+
+{%block meta%}
+
+{%endblock%}
+
 {%block content%}
    <!--================Blog Area =================-->
 
@@ -63,6 +68,16 @@
                     <!-- card one -->
                     <div class="tab-pane fade show active s" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">           
                         <div class="whats-news-caption">
+                                <!-- Yandex.RTB R-A-10548229-7 -->
+                                <div id="yandex_rtb_R-A-10548229-7"></div>
+                                <script>
+                                window.yaContextCb.push(() => {
+                                    Ya.Context.AdvManager.render({
+                                        "blockId": "R-A-10548229-7",
+                                    "renderTo": "yandex_rtb_R-A-10548229-7"
+                                    })
+                                })
+                                </script>
                            <hr> 
                            <h3>O'xshash yangiliklar</h3>
                            <br>
@@ -105,7 +120,7 @@
                             
                                 {%for i in all%}
                                 
-                                <div class="col-xl-2 col-lg-3 col-md-4 mb-4 col-sm-6 col-6">
+                                <div class="col-xl-2 col-lg-3 col-md-4 mb-4 col-sm-6 col-6 overflow-hidden">
                                     
                                         <div class="single-what-news">
                                             <div class="news-card">
@@ -145,5 +160,52 @@
       }
    </style>
    <!--================ Blog Area end =================-->
+   <script>
+    function createMetaKeywordsFromTitle() {
+        // Get the title of the document
+        const title = '{{ news.title }}';
 
+        // Split the title into words
+        const words = title.split(' ');
+
+        // List of common stop words to filter out
+        const stopWords = ['va', 'bilan', 'kabi', "bo'ldi",'bo`ldi', 'qildi', 'mumkin', 'bo‘ldi', 'deb'];
+
+        // Filter out stop words and empty strings
+        const keywords = words.filter(word => !stopWords.includes(word.toLowerCase()) && word.trim() !== '');
+
+        // Create a meta tag for keywords
+        const metaKeywords = document.createElement('meta');
+        metaKeywords.name = 'keywords';
+        metaKeywords.content = keywords.join(', ');
+
+        // Append the meta tag to the head
+        document.head.appendChild(metaKeywords);
+
+        // Debugging: Log the keywords
+        console.log('Meta keywords:', keywords.join(', '));
+    }
+
+    // Call the function to create meta keywords from title when the document is loaded
+    window.onload = createMetaKeywordsFromTitle;
+</script>
+
+<!-- Yandex.RTB R-A-10548229-8 -->
+<script>
+    (function renderInImage(images) {
+        if (!images.length) {
+            return
+        }
+        const image = images.shift()
+        image.id = `yandex_rtb_R-A-10548229-8-${Math.random().toString(16).slice(2)}`
+        window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+                "renderTo": image.id,
+                "blockId": "R-A-10548229-8",
+                "type": "inImage"
+            })
+        })
+        renderInImage(images)
+    })(Array.from(document.querySelectorAll("img")))
+    </script>
 {%endblock%}

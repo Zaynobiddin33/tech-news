@@ -12,35 +12,13 @@ import json
 from django.core.cache import cache
 import praw
 import time
-
+from translate import Translator
+import html
 from . import bot
 
 # from googletrans import Translator
 
 REDDIT_API = 'f0af863c-7380-4f72-b013-e3714699db6f:988ddf50-28fa-4148-9da7-23803484f7be'
-
-def translation(api_key, text, source_lang, target_lang):    
-    url = 'https://mohir.ai/api/v1/translate'
-    data = {
-        "text": text,
-        "src": source_lang,
-        "tgt": target_lang,
-        "blocking": "true",
-        # "webhook_notification_url": "https://example.com"
-    }
-    headers = {
-        'Authorization': api_key,
-        'Content-Type': 'application/json'
-    }
-    
-    try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return f"Request failed with status code {response.status_code}: {response.text}"
-    except requests.exceptions.Timeout:
-        return "Request timed out. The API response took too long to arrive."
 
 def main(request):
 
@@ -176,6 +154,7 @@ def accept(request, id):
         model.is_accepted = True
         model.content = request.POST['text']
         model.save()
+    model = models.ShortNews.objects.get(id = id)
     html_text = f'<a href="https://tech-news.uz/shorts/{model.slug}"> Saytda o`qish </a>'
     bot.send_message_sync(model.content + '\n\n 👉🏻' + html_text, image_url=model.image_url)
     return redirect('check')
@@ -189,71 +168,63 @@ def deny(request, id=None):
     model.delete()
     return redirect('check')
 
+def translate_text(text, source_lang, target_lang):
+    translator = Translator(from_lang=source_lang, to_lang=target_lang)
+    translation = translator.translate(text)
+    translation = html.unescape(translation)
+    return translation
+
 def get_news(request, name):
-    # translator = Translator()
-    # Replace these values with your own Reddit API credentials
     REDDIT_CLIENT_ID = '4vyvkbUyrnVfaKQMLj7X5A'
     REDDIT_CLIENT_SECRET = 'vKzSPaHLgpifHObL4La8e2Wa-K8PBA'
     REDDIT_USER_AGENT = 'tech-news-uz by Psychological_Tap676'
 
-    # Initialize Reddit instance with your credentials
     reddit = praw.Reddit(
         client_id=REDDIT_CLIENT_ID,
         client_secret=REDDIT_CLIENT_SECRET,
         user_agent=REDDIT_USER_AGENT
     )
 
-    # Specify the subreddit you want to fetch posts from
-    subreddit_name = name  # Replace with your desired subreddit
-
-    # Get the subreddit instance
+    subreddit_name = name
     subreddit = reddit.subreddit(subreddit_name)
-
-    # Fetch the latest posts
     latest_posts = subreddit.hot(limit=10)
-    for post in latest_posts:
-    # print(post.title)  # Print titles of posts
-    # print(post.url)    # Print URLs of posts
-    # print('-' * 40)    # Separator between posts
-    # translation = translator.translate(post.title, src='en', dest='uz')
-    # print(translation)
-    # print('-'*50)
+
+    for num, post in enumerate(latest_posts):
         try:
-            # Check if the 'preview' attribute exists and access its 'url' if available
-            if hasattr(post, 'preview') and post.preview:
-                print(post.preview['images'][0]['source']['url'])
-            else:
-                print('None')  # Print 'None' if 'preview' or its parts are missing
-        except AttributeError:
-            print('None')  # Handle AttributeError if 'post' does not have 'preview'
-        except (IndexError, KeyError):
-            print('None')  # Handle IndexError or KeyError if nested attributes are missing
+            image_url = post.preview['images'][0]['source']['url'] if hasattr(post, 'preview') and post.preview else 'None'
+        except (AttributeError, IndexError, KeyError):
+            image_url = 'None'
 
         if post.author:
-                try:
-                    redditor = reddit.redditor(post.author.name)
-                    profile_picture_url = redditor.icon_img
-                    print(f"Author's Profile Picture URL: {profile_picture_url}")
-                except praw.exceptions.APIException as e:
-                    print(f"API Exception: {e}")
-                except Exception as e:
-                    print(f"Error: {e}")
+            try:
+                redditor = reddit.redditor(post.author.name)
+                profile_picture_url = redditor.icon_img
+            except Exception as e:
+                profile_picture_url = 'None'
+                print(f"Error: {e}")
         else:
+            profile_picture_url = 'None'
             print("Author not available")
 
-        result = translation(REDDIT_API, post.title, 'en', 'uz')
-        print(result['result']['text'])
+        try:
+            content = translate_text(post.title, 'en', 'uz')
+        except Exception as e:
+            content = 'Translation Error'
+            print(f"Translation Error: {e}")
+
         try:
             models.ShortNews.objects.create(
-                image_url = post.preview['images'][0]['source']['url'],
-                author = post.author,
-                content = result['result']['text'],
-                author_pic = profile_picture_url,
-                image_height = post.preview['images'][0]['source']['height'],
-                image_width = post.preview['images'][0]['source']['width'],
-                reddit_url = post.shortlink
+                image_url=image_url,
+                author=post.author.name if post.author else 'Unknown',
+                content=content,
+                author_pic=profile_picture_url,
+                image_height=post.preview['images'][0]['source']['height'] if image_url != 'None' else 0,
+                image_width=post.preview['images'][0]['source']['width'] if image_url != 'None' else 0,
+                reddit_url=post.shortlink
             )
-        except:
+            print(f'num:{num+1}')
+        except Exception as e:
+            print(f"Database Error: {e}")
             pass
 
     return redirect('check')
@@ -288,72 +259,59 @@ def search_reddit(request):
         )
 
         # Specify the subreddit you want to fetch posts from
-        subreddit_name = name  # Replace with your desired subreddit
-
-        # Get the subreddit instance
+        subreddit_name = name
         subreddit = reddit.subreddit(subreddit_name)
-
-        # Fetch the latest posts
         latest_posts = subreddit.hot(limit=10)
-        for post in latest_posts:
-        # print(post.title)  # Print titles of posts
-        # print(post.url)    # Print URLs of posts
-        # print('-' * 40)    # Separator between posts
-        # translation = translator.translate(post.title, src='en', dest='uz')
-        # print(translation)
-        # print('-'*50)
+
+        for num, post in enumerate(latest_posts):
             try:
-                # Check if the 'preview' attribute exists and access its 'url' if available
-                if hasattr(post, 'preview') and post.preview:
-                    print(post.preview['images'][0]['source']['url'])
-                else:
-                    print('None')  # Print 'None' if 'preview' or its parts are missing
-            except AttributeError:
-                print('None')  # Handle AttributeError if 'post' does not have 'preview'
-            except (IndexError, KeyError):
-                print('None')  # Handle IndexError or KeyError if nested attributes are missing
+                image_url = post.preview['images'][0]['source']['url'] if hasattr(post, 'preview') and post.preview else 'None'
+            except (AttributeError, IndexError, KeyError):
+                image_url = 'None'
 
             if post.author:
-                    try:
-                        redditor = reddit.redditor(post.author.name)
-                        profile_picture_url = redditor.icon_img
-                        print(f"Author's Profile Picture URL: {profile_picture_url}")
-                    except praw.exceptions.APIException as e:
-                        print(f"API Exception: {e}")
-                    except Exception as e:
-                        print(f"Error: {e}")
+                try:
+                    redditor = reddit.redditor(post.author.name)
+                    profile_picture_url = redditor.icon_img
+                except Exception as e:
+                    profile_picture_url = 'None'
+                    print(f"Error: {e}")
             else:
+                profile_picture_url = 'None'
                 print("Author not available")
 
-            result = translation(REDDIT_API, post.title, 'en', 'uz')
-            print(result['result']['text'])
-            if post.media:
-                try:
+            try:
+                content = translate_text(post.title, 'en', 'uz')
+            except Exception as e:
+                content = 'Translation Error'
+                print(f"Translation Error: {e}")
+
+            try:
+                if post.media:
                     models.ShortNews.objects.create(
-                    image_url = post.preview['images'][0]['source']['url'],
-                    author = post.author,
-                    content = result['result']['text'],
-                    author_pic = profile_picture_url,
-                    image_height = post.preview['images'][0]['source']['height'],
-                    image_width = post.preview['images'][0]['source']['width'],
-                    video = post.media['oembed']['html'],
-                    reddit_url = post.shortlink
-                )
-                except:
-                    pass
-            else:
-                try:
+                        image_url=image_url,
+                        author=post.author.name if post.author else 'Unknown',
+                        content=content,
+                        author_pic=profile_picture_url,
+                        image_height=post.preview['images'][0]['source']['height'] if image_url != 'None' else 0,
+                        image_width=post.preview['images'][0]['source']['width'] if image_url != 'None' else 0,
+                        reddit_url=post.shortlink,
+                        video = post.media['oembed']['html'],)
+                else:
                     models.ShortNews.objects.create(
-                    image_url = post.preview['images'][0]['source']['url'],
-                    author = post.author,
-                    content = result['result']['text'],
-                    author_pic = profile_picture_url,
-                    image_height = post.preview['images'][0]['source']['height'],
-                    image_width = post.preview['images'][0]['source']['width'],
-                    reddit_url = post.shortlink
+                        image_url=image_url,
+                        author=post.author.name if post.author else 'Unknown',
+                        content=content,
+                        author_pic=profile_picture_url,
+                        image_height=post.preview['images'][0]['source']['height'] if image_url != 'None' else 0,
+                        image_width=post.preview['images'][0]['source']['width'] if image_url != 'None' else 0,
+                        reddit_url=post.shortlink
                 )
-                except:
-                    pass
+                print(f'num:{num+1}')
+            except Exception as e:
+                print(f"Database Error: {e}")
+                pass
+
         return redirect('check')
     
 def short_details(request, slug):
@@ -369,6 +327,9 @@ def short_details(request, slug):
     user_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', None))
     if comments.first() == None:
         comments = None
+        num_comments = 0
+    else:
+        num_comments = comments.count()
     if request.method == 'POST':
         name = request.POST['name']
         comment = request.POST['comment']
@@ -382,7 +343,8 @@ def short_details(request, slug):
         is_liked = False
     else:
         is_liked = True
-    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'is_liked':is_liked, 'likes':likes})
+    
+    return render(request, 'test.html', {'image': image, 'next': next_news, 'prev':prev_news, 'comments':comments, 'num_comments':num_comments, 'is_liked':is_liked, 'likes':likes})
 
 def like(request, slug):
     news = models.ShortNews.objects.get(slug = slug)
