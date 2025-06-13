@@ -210,7 +210,7 @@ def get_news(request, name):
     subreddit = reddit.subreddit(subreddit_name)
 
     # Fetch the latest posts
-    latest_posts = subreddit.hot(limit=30)
+    latest_posts = subreddit.hot(limit=10)
     for post in latest_posts:
     # print(post.title)  # Print titles of posts
     # print(post.url)    # Print URLs of posts
@@ -294,7 +294,7 @@ def search_reddit(request):
         subreddit = reddit.subreddit(subreddit_name)
 
         # Fetch the latest posts
-        latest_posts = subreddit.hot(limit=30)
+        latest_posts = subreddit.hot(limit=10)
         for post in latest_posts:
         # print(post.title)  # Print titles of posts
         # print(post.url)    # Print URLs of posts
