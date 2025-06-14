@@ -1,1 +1,1 @@
-GEMINI_API = "put the api"
+GEMINI_API = "AIzaSyB0G3GKsXo3VFXi3_QVvq3tWMMvz9-pEss"

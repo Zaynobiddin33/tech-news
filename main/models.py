@@ -15,7 +15,7 @@ class Category(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length = 255)
-    slug = models.SlugField(unique=True, max_length=200)
+    slug = models.SlugField(unique=True, max_length=300)
     category = models.ForeignKey(Category, on_delete = models.SET_NULL, null = True)
     text = RichTextUploadingField()
     is_essential = models.BooleanField(default = False)
@@ -24,6 +24,11 @@ class News(models.Model):
     views = models.IntegerField(default = 0)
     def __str__(self) -> str:
         return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super(News, self).save(*args, **kwargs)
     
 
         

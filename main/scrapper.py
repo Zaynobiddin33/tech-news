@@ -5,20 +5,16 @@ import json
 import os
 
 def engadged_scrap_urls():
-    url = 'https://www.engadget.com'
+    url = 'https://arstechnica.com'
     headers = {
     "User-Agent": "Mozilla/5.0"
     }
     response = requests.get(url, headers=headers)
 
     soup = BeautifulSoup(response.text, 'html.parser')
-    urls = soup.find_all('a')
-    filtered_urls = []
-    for url in urls:
-        if 'https://www.engadget.com/' in url['href']:
-            filtered_urls.append(url['href'])
-    sorted_urls = filter_urls(str(filtered_urls))
-    return sorted_urls
+    urls = soup.find_all('a', class_='uppercase')
+    filtered_urls = [url['href'] for url in urls]
+    return filtered_urls
 
 def make_title(url):
     headers = {
@@ -28,7 +24,7 @@ def make_title(url):
     response = requests.get(url, headers=headers)
 
     soup = BeautifulSoup(response.text, "html.parser")
-    title = soup.find('title').text
+    title = soup.find('h1', class_='dusk:text-gray-100').text
     return generate_title(title)
 
 def make_news(url):
@@ -39,12 +35,20 @@ def make_news(url):
     response = requests.get(url, headers=headers)
 
     soup = BeautifulSoup(response.text, "html.parser")
-    title = soup.find('title').text
-    body = soup.find('div', class_="caas-body")
-    return generate_news(str(body))
+    body = soup.find_all('div', class_="post-content")
+    text = ''
+    for data in body:
+        text+=str(data)
+    
+    return generate_news(text)
 
-def make_image(news):
-    url = BeautifulSoup(news, 'html.parser').find('img')['src']
+def make_image(url):
+    headers = {
+    "User-Agent": "Mozilla/5.0"
+    }
+    response = requests.get(url, headers=headers)
+    url = BeautifulSoup(response.text, 'html.parser').find('img', class_='object-cover')['src']
+
     response = requests.get(url)
     return response.content
     
