@@ -9,10 +9,14 @@ def engadged_scrap_urls():
     headers = {
     "User-Agent": "Mozilla/5.0"
     }
-    response = requests.get(url, headers=headers)
+    data = {
+        "view": "list"
+    }
+    session = requests.Session()
+    response = session.post(url, headers=headers, data=data)
 
     soup = BeautifulSoup(response.text, 'html.parser')
-    urls = soup.find_all('a', class_='uppercase')
+    urls = soup.find_all('a', class_='text-gray-700')
     filtered_urls = [url['href'] for url in urls]
     return filtered_urls
 
@@ -74,3 +78,5 @@ def add_url(url: str):
         data.append(url)
         with open('urls.json', 'w') as f:
             json.dump(data, f, indent=2)
+
+print(engadged_scrap_urls())

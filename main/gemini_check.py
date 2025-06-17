@@ -33,7 +33,7 @@ def generate_news(news:str):
 
 def generate_title(title:str):
 
-    instruction = 'you are a news maker model in uzbek for tech-news.uz website. you are given a title, and you paraphrase or translate it into Uzbek. Only write title nothing more. Just one title. Not so long, not multiple options. No text styling like markdown, or something. only plain text'
+    instruction = 'you are a news maker model in uzbek for tech-news.uz website. you are given a title, and you paraphrase or translate it into Uzbek. Only write title nothing more. Just one title. Not so long, not multiple options. No text styling like markdown, or something. only plain text. No thinking allowed, only give the title'
 
     response = client.models.generate_content(
         model="gemini-2.5-flash-preview-05-20",
