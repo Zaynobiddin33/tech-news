@@ -2,18 +2,23 @@ from bs4 import BeautifulSoup
 import requests
 from .gemini_check import *
 import json
+import cloudscraper
 import os
 
 def engadged_scrap_urls():
+    scraper = cloudscraper.create_scraper()
     url = 'https://arstechnica.com'
+    proxies = {
+            'http':' 89.117.145.245:3128',
+            'https':' 89.117.145.245:3128'
+    }
     headers = {
     "User-Agent": "Mozilla/5.0"
     }
     data = {
         "view": "list"
     }
-    session = requests.Session()
-    response = session.post(url, headers=headers, data=data)
+    response = scraper.post(url, headers=headers, proxies=proxies, data=data)
 
     soup = BeautifulSoup(response.text, 'html.parser')
     urls = soup.find_all('a', class_='text-gray-700')
