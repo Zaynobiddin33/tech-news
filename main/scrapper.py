@@ -5,13 +5,16 @@ import json
 import cloudscraper
 import os
 
+address = '51.81.245.3:17981'
+proxies = {
+        'http':address,
+        'https':address
+}
+
 def engadged_scrap_urls():
+    global proxies
     scraper = cloudscraper.create_scraper()
     url = 'https://arstechnica.com'
-    proxies = {
-            'http':' 89.117.145.245:3128',
-            'https':' 89.117.145.245:3128'
-    }
     headers = {
     "User-Agent": "Mozilla/5.0"
     }
@@ -26,22 +29,26 @@ def engadged_scrap_urls():
     return filtered_urls
 
 def make_title(url):
+    scraper = cloudscraper.create_scraper()
+    global proxies
     headers = {
         "User-Agent": "Mozilla/5.0"
     }
 
-    response = requests.get(url, headers=headers)
+    response = scraper.get(url, headers=headers, proxies=proxies)
 
     soup = BeautifulSoup(response.text, "html.parser")
     title = soup.find('h1', class_='dusk:text-gray-100').text
     return generate_title(title)
 
 def make_news(url):
+    scraper = cloudscraper.create_scraper()
+    global proxies
     headers = {
         "User-Agent": "Mozilla/5.0"
     }
 
-    response = requests.get(url, headers=headers)
+    response = scraper.get(url, headers=headers, proxies=proxies)
 
     soup = BeautifulSoup(response.text, "html.parser")
     body = soup.find_all('div', class_="post-content")
@@ -52,10 +59,12 @@ def make_news(url):
     return generate_news(text)
 
 def make_image(url):
+    scraper = cloudscraper.create_scraper()
+    global proxies
     headers = {
     "User-Agent": "Mozilla/5.0"
     }
-    response = requests.get(url, headers=headers)
+    response = scraper.get(url, headers=headers, proxies=proxies)
     url = BeautifulSoup(response.text, 'html.parser').find('img', class_='object-cover')['src']
 
     response = requests.get(url)
@@ -83,5 +92,3 @@ def add_url(url: str):
         data.append(url)
         with open('urls.json', 'w') as f:
             json.dump(data, f, indent=2)
-
-print(engadged_scrap_urls())
