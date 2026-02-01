@@ -4,8 +4,10 @@ from .gemini_check import *
 import json
 import cloudscraper
 import os
+from .tokens import *
 
-address = '51.81.245.3:17981'
+# address = '110.49.211.18:80'
+address = f"{USERNAME}:{PASSWORD}@{PROXY_HOST}:{PROXY_PORT}"
 proxies = {
         'http':address,
         'https':address

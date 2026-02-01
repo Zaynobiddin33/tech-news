@@ -281,7 +281,8 @@ def search_reddit(request):
                 print("Author not available")
 
             try:
-                content = translate_text(post.title, 'en', 'uz')
+                # content = translate_text(post.title, 'en', 'uz')
+                content = post.title
             except Exception as e:
                 content = 'Translation Error'
                 print(f"Translation Error: {e}")
