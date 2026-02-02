@@ -31,7 +31,26 @@
                        <div class="richfield">
                            {{ news.text | safe }}
                        </div>
+                       <!-- Yandex.RTB R-A-10548229-8 -->
+                        <script>
+                            (function renderInImage(images) {
+                                if (!images.length) {
+                                    return
+                                }
+                                const image = images.shift()
+                                image.id = `yandex_rtb_R-A-10548229-8-${Math.random().toString(16).slice(2)}`
+                                window.yaContextCb.push(() => {
+                                    Ya.Context.AdvManager.render({
+                                        "renderTo": image.id,
+                                        "blockId": "R-A-10548229-8",
+                                        "type": "inImage"
+                                    })
+                                })
+                                renderInImage(images)
+                            })(Array.from(document.querySelectorAll("img")))
+                            </script>
                    </div>
+                   
                </div>
            </div>
            <div class="col-xl-4 col-lg-5">
@@ -190,22 +209,5 @@
     window.onload = createMetaKeywordsFromTitle;
 </script>
 
-<!-- Yandex.RTB R-A-10548229-8 -->
-<script>
-    (function renderInImage(images) {
-        if (!images.length) {
-            return
-        }
-        const image = images.shift()
-        image.id = `yandex_rtb_R-A-10548229-8-${Math.random().toString(16).slice(2)}`
-        window.yaContextCb.push(() => {
-            Ya.Context.AdvManager.render({
-                "renderTo": image.id,
-                "blockId": "R-A-10548229-8",
-                "type": "inImage"
-            })
-        })
-        renderInImage(images)
-    })(Array.from(document.querySelectorAll("img")))
-    </script>
+
 {%endblock%}
